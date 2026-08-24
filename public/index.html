@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAFE B-MOD — ลงทะเบียนเข้าร่วมโครงการ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;600;700;800&family=Sarabun:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Topbar Menu -->
+    <div class="topbar">
+        <div class="brand">
+            <div class="brand-mark"></div>
+            <div class="brand-text">
+                SAFE B-MOD
+                <small>เขตสุขภาพที่ 1</small>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-ghost btn-sm" onclick="goCheckStatus()">🔍 ตรวจสอบรายชื่อ</button>
+            <button class="btn btn-primary btn-sm" onclick="goRegister()">ลงทะเบียนเข้าร่วม</button>
+        </div>
+    </div>
+
+    <!-- Page 1: Information -->
+    <main id="page-info">
+        <header class="hero">
+            <div>
+                <div class="eyebrow">โครงการพัฒนาศักยภาพครู</div>
+                <h1>เสริมพลังในการปรับพฤติกรรม<br>เด็กวัยเรียนวัยรุ่น (SAFE B-MOD)</h1>
+                <div class="subtitle-en">Strengthening Alliance for Empowering Behavioral Modification</div>
+                <p class="lead">โครงการฝึกอบรมเชิงปฏิบัติการเพื่อเพิ่มทักษะครูและบุคลากรทางการศึกษาในการดูแล สังเกต และปรับพฤติกรรมสุขภาพจิตเด็กวัยเรียนวัยรุ่น</p>
+                <div class="hero-ctas">
+                    <button class="btn btn-primary" onclick="goRegister()">ลงทะเบียนเลย</button>
+                    <button class="btn btn-ghost" onclick="document.getElementById('sec-schedule').scrollIntoView({behavior:'smooth'})">ดูกำหนดการ</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Section 1: รายละเอียดโครงการ -->
+        <section id="sec-details" class="block" style="margin-top: 40px;">
+            <div class="sec-head">
+                <span class="sec-index">01</span>
+                <h2>หลักการและเหตุผล</h2>
+            </div>
+            <div class="rationale-card">
+                <div id="rationale-clip" class="clip">
+                    <p>ปัญหาสุขภาพจิตและพฤติกรรมในเด็กและวัยรุ่นเป็นปัญหาสำคัญที่ต้องได้รับความร่วมมือจากทุกภาคส่วน โดยเฉพาะสถานศึกษาซึ่งเป็นสถานที่ที่เด็กใช้เวลาอยู่มากที่สุด ครูจึงมีบทบาทสำคัญอย่างยิ่งในการเฝ้าระวังและคัดกรองเบื้องต้น</p>
+                    <p>โครงการ SAFE B-MOD มุ่งเน้นการสร้างองค์ความรู้ เครื่องมือ และแนวทางการปรับพฤติกรรมเชิงบวกที่นำไปใช้ได้จริงในห้องเรียน เพื่อช่วยให้ครูสามารถช่วยเหลือเด็กๆ ได้อย่างทันท่วงที</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: กำหนดการโครงการ (เพิ่มใหม่) -->
+        <section id="sec-schedule" class="block" style="margin-top: 40px;">
+            <div class="sec-head">
+                <span class="sec-index">02</span>
+                <h2>กำหนดการฝึกอบรม</h2>
+            </div>
+            <div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="background: #f8f9fa; border-bottom: 2px solid #0d6efd;">
+                                <th style="padding: 12px; width: 20%; font-family: 'Prompt';">เวลา</th>
+                                <th style="padding: 12px; font-family: 'Prompt';">หัวข้อการบรรยาย / กิจกรรม</th>
+                                <th style="padding: 12px; width: 25%; font-family: 'Prompt';">วิทยากร/ผู้รับผิดชอบ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px; font-weight: 600; color: #0d6efd;">08.30 - 09.00 น.</td>
+                                <td style="padding: 12px;">ลงทะเบียน และรับเอกสารประกอบการอบรม</td>
+                                <td style="padding: 12px; color: #6c757d;">ทีมงานผู้จัดงาน</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px; font-weight: 600; color: #0d6efd;">09.00 - 09.30 น.</td>
+                                <td style="padding: 12px;">พิธีเปิดการอบรม และชี้แจงวัตถุประสงค์โครงการ</td>
+                                <td style="padding: 12px; color: #6c757d;">ประธานในพิธี</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px; font-weight: 600; color: #0d6efd;">09.30 - 10.30 น.</td>
+                                <td style="padding: 12px;"><strong>บรรยาย:</strong> สถานการณ์สุขภาพจิตเด็กวัยเรียนและเทคนิคการสังเกตพฤติกรรม</td>
+                                <td style="padding: 12px; color: #6c757d;">วิทยากรเชี่ยวชาญด้านสุขภาพจิต</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee; background: #fafafa;">
+                                <td style="padding: 10px; font-weight: 600; color: #854d0e;">10.30 - 10.45 น.</td>
+                                <td style="padding: 10px; color: #854d0e;" colspan="2">☕ พักรับประทานอาหารว่าง</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px; font-weight: 600; color: #0d6efd;">10.45 - 12.00 น.</td>
+                                <td style="padding: 12px;"><strong>Workshop 1:</strong> การใช้เครื่องมือคัดกรองและการสื่อสารเพื่อการปรึกษาเบื้องต้น (Counseling Skills)</td>
+                                <td style="padding: 12px; color: #6c757d;">ทีมวิทยากรและกระบวนกร</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee; background: #fafafa;">
+                                <td style="padding: 10px; font-weight: 600; color: #854d0e;">12.00 - 13.00 น.</td>
+                                <td style="padding: 10px; color: #854d0e;" colspan="2">🍱 พักรับประทานอาหารกลางวัน</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px; font-weight: 600; color: #0d6efd;">13.00 - 15.00 น.</td>
+                                <td style="padding: 12px;"><strong>Workshop 2:</strong> เทคนิคการปรับพฤติกรรมเชิงบวกในห้องเรียน (Behavioral Modification)</td>
+                                <td style="padding: 12px; color: #6c757d;">ทีมวิทยากรประจำกลุ่ม</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #eee;">
+                                <td style="padding: 12px; font-weight: 600; color: #0d6efd;">15.00 - 16.00 น.</td>
+                                <td style="padding: 12px;">สรุปบทเรียน ถอดประสบการณ์ และมอบเกียรติบัตร</td>
+                                <td style="padding: 12px; color: #6c757d;">ทีมงานผู้จัดงาน</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Page 2: Register Form -->
+    <main id="page-register" style="display: none;">
+        <div class="form-wrap" id="form-view">
+            <div class="form-head">
+                <button class="btn btn-ghost btn-sm" onclick="goInfo()" style="margin-bottom: 12px;">← กลับหน้าหลัก</button>
+                <div class="eyebrow">แบบฟอร์มออนไลน์</div>
+                <h1>ลงทะเบียนเข้าร่วมโครงการ SAFE B-MOD</h1>
+            </div>
+
+            <form onsubmit="return submitForm(event)">
+                <div class="row-2">
+                    <div class="field">
+                        <label>คำนำหน้า <span class="req">*</span></label>
+                        <select name="prefix" required>
+                            <option value="">-- เลือก --</option>
+                            <option value="นาย">นาย</option>
+                            <option value="นาง">นาง</option>
+                            <option value="นางสาว">นางสาว</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>ชื่อ <span class="req">*</span></label>
+                        <input type="text" name="firstname" placeholder="ชื่อจริง" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label>นามสกุล <span class="req">*</span></label>
+                    <input type="text" name="lastname" placeholder="นามสกุล" required>
+                </div>
+
+                <div class="field">
+                    <label>ตำแหน่ง <span class="req">*</span></label>
+                    <input type="text" name="position" placeholder="เช่น ครูแนะแนว" required>
+                </div>
+
+                <div class="field">
+                    <label>สังกัด / โรงเรียน <span class="req">*</span></label>
+                    <input type="text" name="affiliation" placeholder="ชื่อโรงเรียนหรือหน่วยงาน" required>
+                </div>
+
+                <div class="field">
+                    <label>อีเมล (สำหรับรับใบยืนยันการลงทะเบียน)</label>
+                    <input type="email" name="email" placeholder="example@email.com">
+                </div>
+
+                <div class="field">
+                    <label>เบอร์โทรศัพท์ติดต่อ <span class="req">*</span></label>
+                    <input type="tel" name="phone" placeholder="08X-XXX-XXXX" required>
+                </div>
+
+                <div class="field">
+                    <label>ที่อยู่ / ที่ทำการ</label>
+                    <textarea name="address" placeholder="ที่อยู่ในการจัดส่งเอกสาร"></textarea>
+                </div>
+
+                <div class="submit-row">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">ยืนยันการลงทะเบียน</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="confirm" style="display: none;">
+            <div class="check">✓</div>
+            <h1>ลงทะเบียนสำเร็จ!</h1>
+            <p>ระบบได้บันทึกข้อมูลการลงทะเบียนของคุณเรียบร้อยแล้ว</p>
+            <div class="summary" id="summaryBox"></div>
+            <button class="btn btn-ghost" onclick="goInfo()">กลับสู่หน้าหลัก</button>
+        </div>
+    </main>
+
+    <!-- Page 3: Public Check Status -->
+    <main id="page-check" style="display: none;">
+        <div class="form-wrap" style="max-width: 800px;">
+            <div class="form-head">
+                <button class="btn btn-ghost btn-sm" onclick="goInfo()" style="margin-bottom: 12px;">← กลับหน้าหลัก</button>
+                <div class="eyebrow">ตรวจสอบสถานะ</div>
+                <h1>รายชื่อผู้ลงทะเบียนเข้าร่วมโครงการ</h1>
+            </div>
+
+            <div class="field">
+                <input type="text" id="searchInput" onkeyup="searchNames()" placeholder="🔎 พิมพ์ชื่อ, นามสกุล หรือสังกัดโรงเรียนเพื่อค้นหา...">
+            </div>
+
+            <div style="overflow-x: auto; margin-top: 20px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                    <thead>
+                        <tr style="background: #f8f9fa; border-bottom: 2px solid #ddd;">
+                            <th style="padding: 10px;">#</th>
+                            <th style="padding: 10px;">ชื่อ-นามสกุล</th>
+                            <th style="padding: 10px;">ตำแหน่ง</th>
+                            <th style="padding: 10px;">สังกัด / โรงเรียน</th>
+                            <th style="padding: 10px; text-align: center;">สถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="publicTableBody">
+                        <tr><td colspan="5" style="text-align: center; padding: 20px;">กำลังโหลดข้อมูล...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
