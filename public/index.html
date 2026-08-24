@@ -55,7 +55,7 @@
             </div>
         </section>
 
-        <!-- Section 2: กำหนดการโครงการ (เพิ่มใหม่) -->
+        <!-- Section 2: กำหนดการโครงการ -->
         <section id="sec-schedule" class="block" style="margin-top: 40px;">
             <div class="sec-head">
                 <span class="sec-index">02</span>
@@ -126,7 +126,8 @@
                 <h1>ลงทะเบียนเข้าร่วมโครงการ SAFE B-MOD</h1>
             </div>
 
-            <form onsubmit="return submitForm(event)">
+            <!-- เพิ่ม id="registration-form" ตรงนี้ -->
+            <form id="registration-form">
                 <div class="row-2">
                     <div class="field">
                         <label>คำนำหน้า <span class="req">*</span></label>
@@ -221,5 +222,45 @@
     </main>
 
     <script src="js/script.js"></script>
+    
+    <!-- ครอบโค้ดด้วยแท็ก <script> เพื่อจัดการส่งฟอร์มลงทะเบียน -->
+    <script>
+        const regForm = document.getElementById('registration-form');
+
+        if (regForm) {
+            regForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(regForm);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    const res = await fetch('/api/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await res.json();
+
+                    if (result.success) {
+                        alert('ลงทะเบียนสำเร็จเรียบร้อยแล้ว!');
+                        regForm.reset();
+                        
+                        // แสดงหน้าจอลงทะเบียนสำเร็จ
+                        document.getElementById('form-view').style.display = 'none';
+                        document.getElementById('confirm').style.display = 'block';
+                    } else {
+                        alert('เกิดข้อผิดพลาด: ' + (result.message || 'กรุณาลองใหม่อีกครั้ง'));
+                    }
+                } catch (err) {
+                    console.error('Error:', err);
+                    alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
