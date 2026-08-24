@@ -268,3 +268,21 @@
     max-width: 650px;
     margin: 0 auto 16px auto;
 }
+/* ลดระยะห่างแนวตั้งของส่วน Hero (ข้อความด้านบน) */
+.hero {
+    padding-top: 40px !important;    /* ปรับระยะห่างจาก Header ลงมา */
+    padding-bottom: 30px !important; /* ลดระยะห่างด้านล่างของ Hero */
+}
+
+/* ลด Margin ด้านล่างของกล่องกลุ่มปุ่มกด */
+.hero-buttons, 
+.hero .btn-group {
+    margin-bottom: 0px !important;
+}
+
+/* ลดระยะห่างด้านบนของส่วนเนื้อหาหลัก (01 หลักการและเหตุผล) */
+.section, 
+section {
+    padding-top: 20px !important;
+    margin-top: 0px !important;
+}
