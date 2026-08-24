@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const nodemailer = require('nodemailer'); // 1. ดึง nodemailerมาใช้งาน
+const nodemailer = require('nodemailer');
 const app = express();
 
 app.use(express.json());
@@ -9,15 +9,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let registrations = [];
 
-// 2. ตั้งค่าตัวส่งอีเมล (ใช้ Gmail App Password)
+// ตั้งค่าตัวส่งอีเมล (โปรดเปลี่ยนเป็นอีเมล และ App Password 16 หลักของคุณ)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'YOUR_EMAIL@gmail.com',     // ใส่อีเมลของคุณที่จะใช้ส่ง
-        pass: 'tccc kxlw lkyl mkkv'  // รหัสผ่านแอป (App Password 16 หลักจาก Google)
+        user: 'YOUR_EMAIL@gmail.com',         // 👈 ใส่อีเมลของคุณตรงนี้
+        pass: 'YOUR_GMAIL_APP_PASSWORD'      // 👈 ใส่ App Password 16 หลักตรงนี้
     }
 });
 
+// Route หน้าเว็บ
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -26,7 +27,7 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
-// 3. API รับการลงทะเบียนพร้อมส่งอีเมล
+// API รับลงทะเบียน (ครอบ try-catch แยกส่วนอีเมลเพื่อป้องกันระบบล่ม)
 app.post('/api/register', async (req, res) => {
     try {
         const formData = req.body;
@@ -43,36 +44,42 @@ app.post('/api/register', async (req, res) => {
             registeredAt: new Date().toLocaleString('th-TH')
         };
         
+        // 1. บันทึกข้อมูลลงในระบบก่อนทันที
         registrations.push(newEntry);
 
-        // ส่งอีเมลยืนยันหากผู้ใช้งานกรอกอีเมลเข้ามา
+        // 2. พยายามส่งอีเมล (ถ้าตั้งค่าไม่ถูกต้อง จะแค่แจ้งเตือนใน Console แต่ไม่ทำให้การลงทะเบียนล้มเหลว)
         if (formData.email) {
-            const mailOptions = {
-                from: '"SAFE B-MOD" <YOUR_EMAIL@gmail.com>',
-                to: formData.email,
-                subject: 'ยืนยันการลงทะเบียนเข้าร่วมโครงการ SAFE B-MOD',
-                html: `
-                    <h3>ยืนยันการลงทะเบียนสำเร็จ</h3>
-                    <p>เรียน คุณ${formData.firstname} ${formData.lastname}</p>
-                    <p>ระบบได้บันทึกการลงทะเบียนเข้าร่วมโครงการ SAFE B-MOD เรียบร้อยแล้ว</p>
-                    <hr>
-                    <p><b>สังกัด/โรงเรียน:</b> ${formData.affiliation}</p>
-                    <p><b>ตำแหน่ง:</b> ${formData.position}</p>
-                    <br>
-                    <p>ขอบคุณที่สนใจเข้าร่วมโครงการกับเรา</p>
-                `
-            };
-
-            await transporter.sendMail(mailOptions);
+            try {
+                const mailOptions = {
+                    from: '"SAFE B-MOD" <YOUR_EMAIL@gmail.com>',
+                    to: formData.email,
+                    subject: 'ยืนยันการลงทะเบียนเข้าร่วมโครงการ SAFE B-MOD',
+                    html: `
+                        <h3>ยืนยันการลงทะเบียนสำเร็จ</h3>
+                        <p>เรียน คุณ${formData.firstname} ${formData.lastname}</p>
+                        <p>ระบบได้บันทึกการลงทะเบียนเข้าร่วมโครงการ SAFE B-MOD เรียบร้อยแล้ว</p>
+                        <hr>
+                        <p><b>สังกัด/โรงเรียน:</b> ${formData.affiliation}</p>
+                        <p><b>ตำแหน่ง:</b> ${formData.position}</p>
+                    `
+                };
+                await transporter.sendMail(mailOptions);
+                console.log('ส่งอีเมลสำเร็จหา:', formData.email);
+            } catch (emailErr) {
+                console.error('ส่งอีเมลไม่สำเร็จ (ตรวจสอบ App Password):', emailErr.message);
+            }
         }
 
-        res.json({ success: true, message: 'ลงทะเบียนและส่งอีเมลเรียบร้อยแล้ว' });
+        // ตอบกลับหน้าเว็บว่าลงทะเบียนสำเร็จ
+        res.json({ success: true, message: 'ลงทะเบียนสำเร็จ' });
+
     } catch (err) {
-        console.error('Register/Email error:', err);
+        console.error('Register error:', err);
         res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการลงทะเบียน' });
     }
 });
 
+// API สำหรับ Admin
 app.get('/api/admin/registrations', (req, res) => {
     res.json({ count: registrations.length, data: registrations });
 });
