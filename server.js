@@ -6,32 +6,62 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ชี้ตำแหน่งโฟลเดอร์ public สำหรับไฟล์ CSS, JS และรูปภาพ
+// ชี้ตำแหน่งโฟลเดอร์ public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route หน้าแรก
+// ตัวแปรเก็บข้อมูลการลงทะเบียนชั่วคราวใน Memory
+let registrations = [];
+
+// 1. Route หน้าแรก และ หน้า Admin
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Route หน้า Admin Dashboard
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
-// API สำหรับลบข้อมูลผู้ลงทะเบียน (สำหรับหน้า Admin)
+// 2. API รับข้อมูลการลงทะเบียน (แก้ไขข้อผิดพลาดลงทะเบียนไม่ได้)
+app.post('/api/register', (req, res) => {
+    try {
+        const formData = req.body;
+        const newEntry = {
+            id: registrations.length + 1,
+            prefix: formData.prefix || '',
+            firstname: formData.firstname || '',
+            lastname: formData.lastname || '',
+            position: formData.position || '',
+            affiliation: formData.affiliation || '',
+            phone: formData.phone || '',
+            email: formData.email || '',
+            address: formData.address || '',
+            registeredAt: new Date().toLocaleString('th-TH')
+        };
+        
+        registrations.push(newEntry);
+        res.json({ success: true, message: 'ลงทะเบียนสำเร็จ' });
+    } catch (err) {
+        console.error('Register error:', err);
+        res.status(500).json({ success: false, message: 'เกิดข้อผิดพลาดในการลงทะเบียน' });
+    }
+});
+
+// 3. API สำหรับดึงข้อมูลไปแสดงในหน้า Admin
+app.get('/api/admin/registrations', (req, res) => {
+    res.json({
+        count: registrations.length,
+        data: registrations
+    });
+});
+
+// 4. API สำหรับลบข้อมูลผู้ลงทะเบียน (สำหรับหน้า Admin)
 app.delete('/api/admin/registrations/:id', (req, res) => {
     const { id } = req.params;
-    
-    // ลบข้อมูลออกจาก Array หรือ Database
-    if (typeof registrations !== 'undefined') {
-        registrations = registrations.filter(item => String(item.id) !== String(id));
-    }
-    
+    registrations = registrations.filter(item => String(item.id) !== String(id));
     res.json({ success: true, message: 'ลบข้อมูลสำเร็จ' });
 });
 
-// Port สำหรับเปิดใช้งานบน Render (เอาไว้บรรทัดล่างสุดของไฟล์เสมอ)
+// Port สำหรับ Render (วางไว้บรรทัดล่างสุดเสมอ)
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
