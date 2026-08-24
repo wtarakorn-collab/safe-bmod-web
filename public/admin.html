@@ -18,6 +18,22 @@
         th { background-color: #f8f9fa; font-family: 'Prompt', sans-serif; font-weight: 600; }
         tr:hover { background-color: #f1f5f9; }
         .badge { background: #e7f5ff; color: #0d6efd; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 14px; }
+        
+        /* สไตล์ปุ่มลบ */
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'Sarabun', sans-serif;
+            transition: background 0.2s;
+        }
+        .btn-delete:hover {
+            background-color: #bb2d3b;
+        }
     </style>
 </head>
 <body>
@@ -44,10 +60,11 @@
                         <th>เบอร์โทรศัพท์</th>
                         <th>อีเมล</th>
                         <th>เวลาที่ลงทะเบียน</th>
+                        <th>จัดการ</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
-                    <tr><td colspan="7" style="text-align: center; color: #aaa;">กำลังโหลดข้อมูล...</td></tr>
+                    <tr><td colspan="8" style="text-align: center; color: #aaa;">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -63,7 +80,7 @@
                 document.getElementById('total-count').innerText = `${result.count} คน`;
 
                 if (result.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #aaa;">ยังไม่มีผู้ลงทะเบียน</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #aaa;">ยังไม่มีผู้ลงทะเบียน</td></tr>';
                     return;
                 }
 
@@ -76,10 +93,35 @@
                         <td>${item.phone}</td>
                         <td>${item.email}</td>
                         <td>${item.registeredAt}</td>
+                        <td>
+                            <button class="btn-delete" onclick="deleteRegistration('${item.id}')">🗑️ ลบ</button>
+                        </td>
                     </tr>
                 `).join('');
             } catch (err) {
                 console.error('Error:', err);
+            }
+        }
+
+        // ฟังก์ชันสำหรับส่งคำสั่งลบข้อมูลไปยัง Server
+        async function deleteRegistration(id) {
+            if (confirm(`คุณต้องการลบรายชื่อรหัส ${id} ใช่หรือไม่?`)) {
+                try {
+                    const res = await fetch(`/api/admin/registrations/${id}`, {
+                        method: 'DELETE'
+                    });
+                    const result = await res.json();
+
+                    if (result.success) {
+                        alert('ลบข้อมูลเรียบร้อยแล้ว');
+                        fetchRegistrations(); // โหลดตารางใหม่ทันทีโดยไม่ต้องรีเฟรชหน้า
+                    } else {
+                        alert('เกิดข้อผิดพลาด: ' + (result.message || 'ไม่สามารถลบข้อมูลได้'));
+                    }
+                } catch (err) {
+                    console.error('Error deleting:', err);
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
+                }
             }
         }
 
