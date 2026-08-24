@@ -126,7 +126,6 @@
                 <h1>ลงทะเบียนเข้าร่วมโครงการ SAFE B-MOD</h1>
             </div>
 
-            <!-- เพิ่ม id="registration-form" ตรงนี้ -->
             <form id="registration-form">
                 <div class="row-2">
                     <div class="field">
@@ -160,7 +159,7 @@
                 </div>
 
                 <div class="field">
-                    <label>อีเมล (สำหรับรับใบยืนยันการลงทะเบียน)</label>
+                    <label>อีเมล</label>
                     <input type="email" name="email" placeholder="example@email.com">
                 </div>
 
@@ -180,12 +179,12 @@
             </form>
         </div>
 
-        <div id="confirm" style="display: none;">
-            <div class="check">✓</div>
-            <h1>ลงทะเบียนสำเร็จ!</h1>
-            <p>ระบบได้บันทึกข้อมูลการลงทะเบียนของคุณเรียบร้อยแล้ว</p>
-            <div class="summary" id="summaryBox"></div>
-            <button class="btn btn-ghost" onclick="goInfo()">กลับสู่หน้าหลัก</button>
+        <!-- หน้าแสดงผลลงทะเบียนสำเร็จ -->
+        <div id="confirm" style="display: none; text-align: center; padding: 40px 20px;">
+            <div style="font-size: 48px; color: #198754; margin-bottom: 16px;">✓</div>
+            <h1 style="font-family: 'Prompt';">ลงทะเบียนสำเร็จ!</h1>
+            <p style="color: #6c757d; margin-bottom: 24px;">ระบบได้บันทึกข้อมูลการลงทะเบียนของคุณเรียบร้อยแล้ว</p>
+            <button class="btn btn-primary" onclick="goInfo()">กลับสู่หน้าหลัก</button>
         </div>
     </main>
 
@@ -210,11 +209,10 @@
                             <th style="padding: 10px;">ชื่อ-นามสกุล</th>
                             <th style="padding: 10px;">ตำแหน่ง</th>
                             <th style="padding: 10px;">สังกัด / โรงเรียน</th>
-                            <th style="padding: 10px; text-align: center;">สถานะ</th>
                         </tr>
                     </thead>
                     <tbody id="publicTableBody">
-                        <tr><td colspan="5" style="text-align: center; padding: 20px;">กำลังโหลดข้อมูล...</td></tr>
+                        <tr><td colspan="4" style="text-align: center; padding: 20px;">กำลังโหลดข้อมูล...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -222,11 +220,33 @@
     </main>
 
     <script src="js/script.js"></script>
-    
-    <!-- ครอบโค้ดด้วยแท็ก <script> เพื่อจัดการส่งฟอร์มลงทะเบียน -->
-    <script>
-        const regForm = document.getElementById('registration-form');
 
+    <!-- Script จัดการการสลับหน้าและลงทะเบียน -->
+    <script>
+        function goInfo() {
+            document.getElementById('page-info').style.display = 'block';
+            document.getElementById('page-register').style.display = 'none';
+            document.getElementById('page-check').style.display = 'none';
+            document.getElementById('form-view').style.display = 'block';
+            document.getElementById('confirm').style.display = 'none';
+        }
+
+        function goRegister() {
+            document.getElementById('page-info').style.display = 'none';
+            document.getElementById('page-register').style.display = 'block';
+            document.getElementById('page-check').style.display = 'none';
+            document.getElementById('form-view').style.display = 'block';
+            document.getElementById('confirm').style.display = 'none';
+        }
+
+        function goCheckStatus() {
+            document.getElementById('page-info').style.display = 'none';
+            document.getElementById('page-register').style.display = 'none';
+            document.getElementById('page-check').style.display = 'block';
+        }
+
+        // จัดการส่งฟอร์มลงทะเบียน
+        const regForm = document.getElementById('registration-form');
         if (regForm) {
             regForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -246,10 +266,7 @@
                     const result = await res.json();
 
                     if (result.success) {
-                        alert('ลงทะเบียนสำเร็จเรียบร้อยแล้ว!');
                         regForm.reset();
-                        
-                        // แสดงหน้าจอลงทะเบียนสำเร็จ
                         document.getElementById('form-view').style.display = 'none';
                         document.getElementById('confirm').style.display = 'block';
                     } else {
