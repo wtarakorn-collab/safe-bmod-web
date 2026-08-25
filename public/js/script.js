@@ -112,14 +112,12 @@ function clearAllFieldStates() {
 function renderSummary(data) {
   const box = document.getElementById('summaryBox');
   const rows = [
-    ['ชื่อ-นามสกุล', `${data.prefix}${data.firstname} ${data.lastname}`]
-  ];
-  if (data.nickname) rows.push(['ชื่อเล่น', data.nickname]);
-  rows.push(
+    ['ชื่อ-นามสกุล', `${data.prefix}${data.firstname} ${data.lastname}`],
+    ['ชื่อเล่น', data.nickname],
     ['ตำแหน่ง', data.position],
     ['สังกัด / โรงเรียน', data.affiliation],
     ['เบอร์โทรศัพท์', data.phone]
-  );
+  ];
   if (data.email) rows.push(['อีเมล', data.email]);
 
   box.innerHTML = rows
@@ -140,6 +138,7 @@ async function submitForm(e) {
     ['f-prefix', !!(data.prefix && data.prefix.trim())],
     ['f-firstname', !!(data.firstname && data.firstname.trim())],
     ['f-lastname', !!(data.lastname && data.lastname.trim())],
+    ['f-nickname', !!(data.nickname && data.nickname.trim())],
     ['f-position', !!(data.position && data.position.trim())],
     ['f-affiliation', !!(data.affiliation && data.affiliation.trim())],
     ['f-phone', !!(data.phone && isValidPhone(data.phone.trim()))]

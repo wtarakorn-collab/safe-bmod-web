@@ -135,6 +135,7 @@ app.post('/api/register', async (req, res) => {
     if (!prefix || !prefix.trim()) errors.prefix = 'กรุณาเลือกคำนำหน้า';
     if (!firstname || !firstname.trim()) errors.firstname = 'กรุณากรอกชื่อ';
     if (!lastname || !lastname.trim()) errors.lastname = 'กรุณากรอกนามสกุล';
+    if (!nickname || !nickname.trim()) errors.nickname = 'กรุณากรอกชื่อเล่น';
     if (!position || !position.trim()) errors.position = 'กรุณากรอกตำแหน่ง';
     if (!affiliation || !affiliation.trim()) errors.affiliation = 'กรุณากรอกสังกัด / โรงเรียน';
     if (!phone || !isValidPhone(phone.trim())) errors.phone = 'กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง';
