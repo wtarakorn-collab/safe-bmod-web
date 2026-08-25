@@ -74,6 +74,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">ชื่อ - นามสกุล</th>
+                        <th scope="col">ชื่อเล่น</th>
                         <th scope="col">ตำแหน่ง</th>
                         <th scope="col">สังกัด / โรงเรียน</th>
                         <th scope="col">เบอร์โทรศัพท์</th>
@@ -83,7 +84,7 @@
                     </tr>
                 </thead>
                 <tbody id="table-body">
-                    <tr><td colspan="8" style="text-align: center; color: #aaa;">กำลังโหลดข้อมูล...</td></tr>
+                    <tr><td colspan="9" style="text-align: center; color: #aaa;">กำลังโหลดข้อมูล...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -111,7 +112,7 @@
                 document.getElementById('total-count').innerText = `${result.count ?? 0} คน`;
 
                 if (!result.data || result.data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #aaa;">ยังไม่มีผู้ลงทะเบียน</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #aaa;">ยังไม่มีผู้ลงทะเบียน</td></tr>';
                     return;
                 }
 
@@ -119,6 +120,7 @@
                     <tr>
                         <td>${item.id}</td>
                         <td><strong>${escapeHtml(item.prefix)}${escapeHtml(item.firstname)} ${escapeHtml(item.lastname)}</strong></td>
+                        <td>${escapeHtml(item.nickname || '-')}</td>
                         <td>${escapeHtml(item.position)}</td>
                         <td>${escapeHtml(item.affiliation)}</td>
                         <td>${escapeHtml(item.phone)}</td>
@@ -132,7 +134,7 @@
             } catch (err) {
                 console.error('Error:', err);
                 document.getElementById('table-body').innerHTML =
-                    '<tr><td colspan="8" style="text-align: center; color: #dc3545;">โหลดข้อมูลไม่สำเร็จ</td></tr>';
+                    '<tr><td colspan="9" style="text-align: center; color: #dc3545;">โหลดข้อมูลไม่สำเร็จ</td></tr>';
             }
         }
 

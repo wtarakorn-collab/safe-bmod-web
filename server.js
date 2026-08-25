@@ -30,6 +30,7 @@ async function initDb() {
       prefix TEXT NOT NULL,
       firstname TEXT NOT NULL,
       lastname TEXT NOT NULL,
+      nickname TEXT,
       position TEXT NOT NULL,
       affiliation TEXT NOT NULL,
       email TEXT,
@@ -38,6 +39,9 @@ async function initDb() {
       submitted_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
   `);
+  // Safe migration: adds the column if the table already existed from before
+  // this field was introduced. Running this on every startup is harmless.
+  await pool.query(`ALTER TABLE registrations ADD COLUMN IF NOT EXISTS nickname TEXT;`);
 }
 
 // ---------- Email (optional — only enabled if credentials are configured) ----------
@@ -125,7 +129,7 @@ app.get('/admin', requireAdminAuth, (req, res) => {
 // ---------- Public: submit a registration ----------
 app.post('/api/register', async (req, res) => {
   try {
-    const { prefix, firstname, lastname, position, affiliation, email, phone, address } = req.body || {};
+    const { prefix, firstname, lastname, nickname, position, affiliation, email, phone, address } = req.body || {};
 
     const errors = {};
     if (!prefix || !prefix.trim()) errors.prefix = 'กรุณาเลือกคำนำหน้า';
@@ -151,6 +155,7 @@ app.post('/api/register', async (req, res) => {
       prefix: prefix.trim(),
       firstname: firstname.trim(),
       lastname: lastname.trim(),
+      nickname: nickname ? nickname.trim() : null,
       position: position.trim(),
       affiliation: affiliation.trim(),
       email: email ? email.trim() : null,
@@ -160,10 +165,10 @@ app.post('/api/register', async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO registrations
-        (prefix, firstname, lastname, position, affiliation, email, phone, address)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+        (prefix, firstname, lastname, nickname, position, affiliation, email, phone, address)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
        RETURNING id, submitted_at`,
-      [entry.prefix, entry.firstname, entry.lastname, entry.position, entry.affiliation, entry.email, entry.phone, entry.address]
+      [entry.prefix, entry.firstname, entry.lastname, entry.nickname, entry.position, entry.affiliation, entry.email, entry.phone, entry.address]
     );
 
     // Respond to the client immediately — registration is already saved.
@@ -235,6 +240,7 @@ app.get('/api/admin/export-excel', requireAdminAuth, async (req, res) => {
       { header: 'คำนำหน้า', key: 'prefix', width: 10 },
       { header: 'ชื่อ', key: 'firstname', width: 18 },
       { header: 'นามสกุล', key: 'lastname', width: 18 },
+      { header: 'ชื่อเล่น', key: 'nickname', width: 14 },
       { header: 'ตำแหน่ง', key: 'position', width: 20 },
       { header: 'สังกัด / โรงเรียน', key: 'affiliation', width: 28 },
       { header: 'เบอร์โทร', key: 'phone', width: 16 },

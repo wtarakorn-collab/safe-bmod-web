@@ -112,11 +112,14 @@ function clearAllFieldStates() {
 function renderSummary(data) {
   const box = document.getElementById('summaryBox');
   const rows = [
-    ['ชื่อ-นามสกุล', `${data.prefix}${data.firstname} ${data.lastname}`],
+    ['ชื่อ-นามสกุล', `${data.prefix}${data.firstname} ${data.lastname}`]
+  ];
+  if (data.nickname) rows.push(['ชื่อเล่น', data.nickname]);
+  rows.push(
     ['ตำแหน่ง', data.position],
     ['สังกัด / โรงเรียน', data.affiliation],
     ['เบอร์โทรศัพท์', data.phone]
-  ];
+  );
   if (data.email) rows.push(['อีเมล', data.email]);
 
   box.innerHTML = rows
