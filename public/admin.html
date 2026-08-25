@@ -7,19 +7,38 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@600;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
     <style>
-        body { background-color: #f4f6f9; padding: 24px; font-family: 'Sarabun', sans-serif; }
-        .admin-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        :root{
+            --primary:#F97316;
+            --accent:#10B981;
+            --ink:#3A2706;
+            --ink-soft:#8A6A3F;
+            --line:#EAD9AE;
+        }
+        body { background-color: #f4f6f9; padding: 24px; font-family: 'Sarabun', sans-serif; margin:0; color: var(--ink); }
+        .admin-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 1200px; margin: 0 auto; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
         .table-responsive { overflow-x: auto; margin-top: 16px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 12px 16px; border-bottom: 1px solid #e9ecef; white-space: nowrap; }
         th { background-color: #f8f9fa; font-family: 'Prompt', sans-serif; font-weight: 600; }
         tr:hover { background-color: #f1f5f9; }
-        .badge { background: #e7f5ff; color: #0d6efd; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 14px; }
-        
-        /* สไตล์ปุ่มลบ */
+        .badge { background: #FFF3D6; color: var(--primary); padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 14px; }
+        .btn-export {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
         .btn-delete {
             background-color: #dc3545;
             color: white;
@@ -45,7 +64,7 @@
                 <p style="color: #6c757d; margin: 4px 0 0 0;">จำนวนทั้งหมด: <span id="total-count" class="badge">0 คน</span></p>
             </div>
             <div>
-                <a href="/api/admin/export-excel" class="btn btn-primary" style="text-decoration: none;">📥 Export Excel</a>
+                <a href="/api/admin/export-excel" class="btn-export">📥 Export Excel</a>
             </div>
         </div>
 
@@ -53,14 +72,14 @@
             <table>
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>ชื่อ - นามสกุล</th>
-                        <th>ตำแหน่ง</th>
-                        <th>สังกัด / โรงเรียน</th>
-                        <th>เบอร์โทรศัพท์</th>
-                        <th>อีเมล</th>
-                        <th>เวลาที่ลงทะเบียน</th>
-                        <th>จัดการ</th>
+                        <th scope="col">#</th>
+                        <th scope="col">ชื่อ - นามสกุล</th>
+                        <th scope="col">ตำแหน่ง</th>
+                        <th scope="col">สังกัด / โรงเรียน</th>
+                        <th scope="col">เบอร์โทรศัพท์</th>
+                        <th scope="col">อีเมล</th>
+                        <th scope="col">เวลาที่ลงทะเบียน</th>
+                        <th scope="col">จัดการ</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
@@ -71,15 +90,27 @@
     </div>
 
     <script>
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str ?? '';
+            return div.innerHTML;
+        }
+
+        function formatDate(iso) {
+            if (!iso) return '';
+            const d = new Date(iso);
+            return d.toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
+        }
+
         async function fetchRegistrations() {
             try {
                 const res = await fetch('/api/admin/registrations');
                 const result = await res.json();
-                
-                const tbody = document.getElementById('table-body');
-                document.getElementById('total-count').innerText = `${result.count} คน`;
 
-                if (result.data.length === 0) {
+                const tbody = document.getElementById('table-body');
+                document.getElementById('total-count').innerText = `${result.count ?? 0} คน`;
+
+                if (!result.data || result.data.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: #aaa;">ยังไม่มีผู้ลงทะเบียน</td></tr>';
                     return;
                 }
@@ -87,34 +118,32 @@
                 tbody.innerHTML = result.data.map(item => `
                     <tr>
                         <td>${item.id}</td>
-                        <td><strong>${item.prefix}${item.firstname} ${item.lastname}</strong></td>
-                        <td>${item.position}</td>
-                        <td>${item.affiliation}</td>
-                        <td>${item.phone}</td>
-                        <td>${item.email}</td>
-                        <td>${item.registeredAt}</td>
+                        <td><strong>${escapeHtml(item.prefix)}${escapeHtml(item.firstname)} ${escapeHtml(item.lastname)}</strong></td>
+                        <td>${escapeHtml(item.position)}</td>
+                        <td>${escapeHtml(item.affiliation)}</td>
+                        <td>${escapeHtml(item.phone)}</td>
+                        <td>${escapeHtml(item.email || '-')}</td>
+                        <td>${formatDate(item.submitted_at)}</td>
                         <td>
-                            <button class="btn-delete" onclick="deleteRegistration('${item.id}')">🗑️ ลบ</button>
+                            <button class="btn-delete" onclick="deleteRegistration(${item.id})">🗑️ ลบ</button>
                         </td>
                     </tr>
                 `).join('');
             } catch (err) {
                 console.error('Error:', err);
+                document.getElementById('table-body').innerHTML =
+                    '<tr><td colspan="8" style="text-align: center; color: #dc3545;">โหลดข้อมูลไม่สำเร็จ</td></tr>';
             }
         }
 
-        // ฟังก์ชันสำหรับส่งคำสั่งลบข้อมูลไปยัง Server
         async function deleteRegistration(id) {
             if (confirm(`คุณต้องการลบรายชื่อรหัส ${id} ใช่หรือไม่?`)) {
                 try {
-                    const res = await fetch(`/api/admin/registrations/${id}`, {
-                        method: 'DELETE'
-                    });
+                    const res = await fetch(`/api/admin/registrations/${id}`, { method: 'DELETE' });
                     const result = await res.json();
 
                     if (result.success) {
-                        alert('ลบข้อมูลเรียบร้อยแล้ว');
-                        fetchRegistrations(); // โหลดตารางใหม่ทันทีโดยไม่ต้องรีเฟรชหน้า
+                        fetchRegistrations();
                     } else {
                         alert('เกิดข้อผิดพลาด: ' + (result.message || 'ไม่สามารถลบข้อมูลได้'));
                     }
@@ -125,7 +154,6 @@
             }
         }
 
-        // โหลดข้อมูลเมื่อเปิดหน้า Admin
         fetchRegistrations();
     </script>
 </body>

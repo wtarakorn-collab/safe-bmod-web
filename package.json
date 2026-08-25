@@ -1,18 +1,21 @@
 {
   "name": "regis-bmod",
   "version": "1.0.0",
+  "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
+  "engines": {
+    "node": ">=18"
+  },
   "license": "ISC",
-  "description": "",
+  "description": "SAFE B-MOD registration web app — Express + PostgreSQL, deployable on Render",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
-    "nodemailer": "^9.0.5"
+    "nodemailer": "^9.0.5",
+    "pg": "^8.11.5"
   }
 }
